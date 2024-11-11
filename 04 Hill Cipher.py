@@ -1,6 +1,7 @@
 import numpy as np
+
 def create_key_matrix(key):
-    
+    """Create a 3x3 key matrix from the provided key."""
     key_matrix = []
     k = 0
     for i in range(3):
@@ -16,12 +17,14 @@ def text_to_vector(text):
 def vector_to_text(vector):
     """Convert vector back to text."""
     return ''.join(chr(int(num) + 65) for num in vector.flatten())
+
 def encrypt_message(plaintext, key):
     """Encrypt the plaintext message using the Hill cipher."""
     key_matrix = create_key_matrix(key)
     message_vector = text_to_vector(plaintext)
     cipher_vector = np.dot(key_matrix, message_vector) % 26
     return vector_to_text(cipher_vector)
+
 def mod_inverse(a, m):
     """Compute modular inverse of a under modulo m."""
     a = a % m
@@ -29,6 +32,7 @@ def mod_inverse(a, m):
         if (a * x) % m == 1:
             return x
     return -1
+
 def decrypt_message(ciphertext, key):
     """Decrypt the ciphertext message using the Hill cipher."""
     key_matrix = create_key_matrix(key)
@@ -48,27 +52,23 @@ def decrypt_message(ciphertext, key):
     cipher_vector = text_to_vector(ciphertext)
     decrypted_vector = np.dot(key_matrix_inv, cipher_vector) % 26
     return vector_to_text(decrypted_vector)
-# Fixed Key
-key = input("Enter The Key: ")
 
-# Input and Execution Flow
-plaintext = input("Enter the plaintext (3 characters): ").upper()
+# Fixed Key and Plaintext
+key = "GYBNQKURP"  # Example key for a 3x3 Hill cipher matrix
+plaintext = "ACT"  # Example plaintext of 3 characters
 
-if len(plaintext) != 3:
-    print("Plaintext must be exactly 3 characters long.")
-else:
-    # Encryption
-    ciphertext = encrypt_message(plaintext, key)
+# Encryption
+ciphertext = encrypt_message(plaintext, key)
+
+# Decryption
+try:
+    decrypted_text = decrypt_message(ciphertext, key)
     
-    # Decryption
-    try:
-        decrypted_text = decrypt_message(ciphertext, key)
-        
-        # Display Results
-        print(f"Plaintext: {plaintext}")
-        print(f"Key: {key}")
-        print(f"Ciphertext: {ciphertext}")
-        print(f"Decrypted Text: {decrypted_text}")
+    # Display Results
+    print(f"Plaintext: {plaintext}")
+    print(f"Key: {key}")
+    print(f"Ciphertext: {ciphertext}")
+    print(f"Decrypted Text: {decrypted_text}")
 
-    except ValueError as e:
-        print(e)
+except ValueError as e:
+    print(e)

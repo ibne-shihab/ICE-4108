@@ -1,7 +1,6 @@
 def create_cipher_key():
     import string
     import random
-    
     alphabet = string.ascii_lowercase
     shuffled = list(alphabet)
     random.shuffle(shuffled)
